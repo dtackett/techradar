@@ -4,8 +4,7 @@ requirejs.config({
   baseUrl: "/scripts/",
   
   paths: {
-    "d3": "../lib/d3/d3",
-    "underscore": "../lib/underscore/underscore"
+    "d3": "../lib/d3/d3"
   },
 
   shim: {
