@@ -1,5 +1,5 @@
 define(['utils'], function(utils) {
-  describe("Radar", function() {
+  describe("Utils", function() {
     describe("Cartesian to Raster Co-ordinate Transformation functions", function() {
       it("cartesian_to_raster_origin", function() {
         var w = 100, h = 100;

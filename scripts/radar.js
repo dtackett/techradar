@@ -37,6 +37,22 @@
       .attr("font-size", "11px");  
   }
 
+  function nestDataByArc(radarData) {
+    var nest = d3.nest()
+                 .key(function(d) { return Math.floor(d.loc);})
+                 .entries(radarData.radar_data[0].items);
+
+    return nest;
+  }
+
+  function spaceEntry(nestedEntry) {
+    // nestedEntry.values.length
+  }
+
+  function computeBounds(radarData) {
+
+  }
+
   function init(radarData) {
     // $('#title').text(radarData.title);  
 
@@ -232,6 +248,8 @@
   }
 
   return {
-    init: init
+    init: init,
+    nestDataByArc: nestDataByArc,
+    spaceEntry: spaceEntry
   };
 });

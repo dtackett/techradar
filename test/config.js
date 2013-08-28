@@ -1,8 +1,15 @@
 /* global requirejs, require */
 requirejs.config({  
   paths: {
-    "utils": "../scripts/utils",
-    "mocha": "../lib/mocha/mocha"
+    d3: '../lib/d3/d3',
+    utils: '../scripts/utils',
+    radar: '../scripts/radar'
+  },
+
+  shim: {
+    d3: {
+      exports: 'd3'
+    }
   }  
 });
 
