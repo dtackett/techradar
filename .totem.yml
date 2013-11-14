@@ -2,11 +2,11 @@
 defaults: {}
 
 branches:
-  - match: 'melt-radar'
+  - match: 'melt-radar-totem-local'
     realms:
-      - realm: 'not-production'
+      - realm: 'local'
         proxy:
-          - host: 'radar.cu.melt.sh'
+          - host: 'radar.totem.local'
             paths:
               - path: '/'
                 port: 8080
