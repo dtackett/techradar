@@ -5,7 +5,7 @@ define(function() {
         title : "Technology Radar",
 
         //This is the concentic circles that want on your radar
-        radar_arcs : [
+        rings : [
                        {'r':100,'name':'Adopt'}
                       ,{'r':200,'name':'Trial'}
                       ,{'r':300,'name':'Assess'}
@@ -50,8 +50,8 @@ define(function() {
         h : 1160,
         w : 1200,
 
-        radar_data : [
-            { "quadrant": "Techniques",
+        sections : [
+            { "name": "Techniques",
                 "left" : 45,
                 "top" : 18,
                 "color" : "#8FA227",
@@ -78,7 +78,7 @@ define(function() {
                 ]
             }
             // },
-            // { "quadrant": "Tools",
+            // { "name": "Tools",
             //     "left": 1160-100+30,
             //     "top" : 18,
             //     "color" : "#587486",
@@ -103,7 +103,7 @@ define(function() {
             //         {"name":"Subversion", "pc":{"r":30,"t":30},"movement":"c"}
             //     ]
             // },
-            // { "quadrant": "Platforms",
+            // { "name": "Platforms",
             //     "left" :45,
             //      "top" : (1200/2 + 18),
             //     "color" : "#DC6F1D",
@@ -134,7 +134,7 @@ define(function() {
             //         {"name":"IE6 End of Life", "pc":{"r":30,"t":225},"movement":"c"}
             //     ]
             // },
-            // { "quadrant": "Languages",
+            // { "name": "Languages",
             //     "color" : "#B70062",
             //     "left"  : (1160-100+30),
             //     "top" :   (1200/2 + 18),

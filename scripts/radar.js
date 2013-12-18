@@ -7,7 +7,7 @@
     var arcs = radar.append("g")
       .attr("class", "arcs")
       .selectAll("circle")
-      .data(radarData.radar_arcs)
+      .data(radarData.rings)
       .enter()
       .append("g")
       .attr("transform", function(d) {
@@ -37,39 +37,60 @@
       .attr("font-size", "11px");  
   }
 
-  function nestDataByArc(radarData) {
-    var nest = d3.nest()
-                 .key(function(d) { return Math.floor(d.loc);})
-                 .entries(radarData.radar_data[0].items);
+  // Break the radar data into buckets based on which ring it should appear
+  function nestDataByRing(radarData) {    
 
-    return nest;
+    for (var section in radarData.sections) {
+      radarData.sections[section].items = d3.nest()
+                  .key(function(d) { return Math.floor(d.loc);})
+                  .map(radarData.sections[section].items);
+    }
+
+    return radarData;
   }
 
-  function spaceEntry(nestedEntry) {
+  function spaceEntries(section) {
+    // TODO Compute the radii for the entries based on the quadrant bounds
+    for (var ring in section) {
+      // Space entries for the ring
+    }
     // nestedEntry.values.length
+
+    return section;
   }
 
+  // Find and set the bounds for each section
   function computeBounds(radarData) {
+    var sectionWidth = 360/radarData.sections.length;
 
+    for (var section in radarData.sections) {
+      radarData.sections[section].bounds = {'start': sectionWidth*section, 'width': sectionWidth};
+    }
+    
+    return radarData;
   }
 
   function init(radarData) {
     // $('#title').text(radarData.title);  
+
+    radarData = nestDataByRing(radarData);
+    radarData = computeBounds(radarData);
+    radarData = spaceEntries(radarData);
 
     var blipLabelPadding = 5;
 
     var globalIndex = 1;  // Start with one so the display is 1 based
     var maxRadius = 0;
 
-    for (var arcIndex in radarData.radar_arcs) {
-      maxRadius = Math.max(maxRadius, radarData.radar_arcs[arcIndex].r);
+    for (var arcIndex in radarData.rings) {
+      maxRadius = Math.max(maxRadius, radarData.rings[arcIndex].r);
     }
 
     // Compute the global index on all the entries
     // this mutates the data
-    for (var quad in radarData.radar_data) {
-      for (var item in radarData.radar_data[quad].items) {
-        radarData.radar_data[quad].items[item].globalIndex = globalIndex++;
+    for (var section in radarData.sections) {
+      for (var item in radarData.sections[section].items) {
+        radarData.sections[section].items[item].globalIndex = globalIndex++;
       }
     }
 
@@ -104,7 +125,7 @@
     var techs = radar.append("g")
       .attr("class", "radar blips")  
       .selectAll("g")
-      .data(radarData.radar_data)
+      .data(radarData.sections)
       .enter()
       .append("g")
       .text(function(d) {
@@ -165,7 +186,7 @@
     var legend = radar.append("g")
       .attr("class", "radar legends")  
       .selectAll("g")
-      .data(radarData.radar_data)
+      .data(radarData.sections)
       .enter()
       .append("g")
       .text(function(d) {
@@ -249,7 +270,8 @@
 
   return {
     init: init,
-    nestDataByArc: nestDataByArc,
-    spaceEntry: spaceEntry
+    computeBounds: computeBounds,
+    nestDataByRing: nestDataByRing,
+    spaceEntries: spaceEntries
   };
 });
