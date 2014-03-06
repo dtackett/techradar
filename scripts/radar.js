@@ -37,22 +37,38 @@
       .attr("font-size", "11px");  
   }
 
+  function getRing(blip) {
+    return Math.floor(blip.loc);
+  }
+
   // Break the radar data into buckets based on which ring it should appear
   function nestDataByRing(radarData) {    
 
     for (var section in radarData.sections) {
       radarData.sections[section].items = d3.nest()
-                  .key(function(d) { return Math.floor(d.loc);})
+                  .key(getRing)
                   .map(radarData.sections[section].items);
     }
 
     return radarData;
   }
 
-  function spaceEntries(section) {
+  function spaceRadar(radarData) {
+    for (var section in radarData.sections) {
+      spaceSection(radarData.sections[section]);
+    }
+
+    return radarData;
+  }
+
+  function spaceSection(section) {
     // TODO Compute the radii for the entries based on the quadrant bounds
-    for (var ring in section) {
+
+    for (var ring in section.items) {
       // Space entries for the ring
+      for (var blip in section.items[ring]) {
+        section.items[ring][blip].t = section.bounds.start + (section.bounds.width/section.items[ring].length) * (parseInt(blip, 10) + 0.5);
+      }      
     }
     // nestedEntry.values.length
 
@@ -70,12 +86,28 @@
     return radarData;
   }
 
+  function flattenData(radarData) {
+    // Lets do a quick hack to dump all the rings in a section back into a single array
+    for (var section in radarData.sections) {
+      var sectionItems = [];
+      for (var item in radarData.sections[section].items) {
+        for (var blip in radarData.sections[section].items[item]) {
+          sectionItems.push(radarData.sections[section].items[item][blip]);
+        }
+      }
+
+      radarData.sections[section].items = sectionItems;
+    }    
+  }
+
   function init(radarData) {
     // $('#title').text(radarData.title);  
 
     radarData = nestDataByRing(radarData);
     radarData = computeBounds(radarData);
-    radarData = spaceEntries(radarData);
+    radarData = spaceRadar(radarData);
+
+    flattenData(radarData);
 
     var blipLabelPadding = 5;
 
@@ -141,7 +173,7 @@
       .append("g")
       .attr("class", "blips")  
       .attr("transform", function(d) {
-          var polar = utils.polar_to_raster(d.pc.r, d.pc.t, radarData.w, radarData.h);
+          var polar = utils.polar_to_raster(d.loc*100, d.t, radarData.w, radarData.h);
 
           d.x = polar[0];
           d.y = radarData.h-polar[1];
@@ -272,6 +304,7 @@
     init: init,
     computeBounds: computeBounds,
     nestDataByRing: nestDataByRing,
-    spaceEntries: spaceEntries
+    spaceRadar: spaceRadar,
+    spaceSection: spaceSection
   };
 });

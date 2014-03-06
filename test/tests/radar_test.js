@@ -172,8 +172,13 @@ define(['radar'], function(radar) {
           ]
         });
 
+        testSection.bounds = {
+          'start': 0,
+          'width': 360
+        };
+
         // space points
-        var spacedData = radar.spaceEntries(testSection);
+        var spacedData = radar.spaceSection(testSection);
 
         // assert points are properly spaces
       });

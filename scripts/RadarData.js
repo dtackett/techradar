@@ -1,5 +1,14 @@
 /* globals define */
 define(function() {
+
+    function createItem(name, loc, movement) {
+        return {
+            "name":name, 
+            "loc": loc,
+            "movement":movement
+        };
+    }
+
     return {
         //This is the title for your window tab, and your Radar
         title : "Technology Radar",
@@ -55,103 +64,126 @@ define(function() {
                 "left" : 45,
                 "top" : 18,
                 "color" : "#8FA227",
+                // [Techniques] (90 - 180)
                 "items" : [ 
-                    // Hold
-                    // Assess
-                    {"name": "Performance testing", "loc": 2.6, "movement": "c"},
-                    {"name": "Load testing", "loc": 2.5, "movement": "c"},
-                    {"name": "Integration Testing", "loc": 2.1, "movement": "c"},
+                    // [Hold]
+                    // [Assess]
+                    createItem('Performance testing', 2.30, 't'),
+                    createItem('Load testing', 2.80, 't'),
+                    createItem('Integration Testing', 2.20, 't'),                    
+                    // [Trial]
+                    createItem('Self executable app containers', 1.20, 't'),                    
+                    createItem('Continuous Delivery', 1.20, 't'),
+                    createItem('Smoke Tests', 1.40, 't'),
+                    createItem('Mobile Web Apps', 1.60, 't'),
+                    // [Adopt]
+                    createItem('System Testing', 0.90, 't'),
+                    createItem('GitFlow', 0.70, 't'),
+                    createItem('Unit Testing', 0.50, 't'),
+                    createItem('TDD', 0.80, 't'),
+                    createItem('Responsive Design', 0.50, 't'),
+                    createItem('Continuous Integration', 0.70, 't'),
+                    createItem('Version control systems', 0.25, 't'),
+                    createItem('Health checks', 0.85, 't')
+                ]
+            },
+            { "name": "Tools",
+                "left": 1160-100+30,
+                "top" : 18,
+                "color" : "#587486",
+                // [Tools] (0 - 90)
+                "items" : [ 
 
-                    // Trial
-                    {"name": "Self executable app containers", "loc": 1.8, "movement": "c"},
-                    {"name": "System Testing", "loc": 1.6, "movement": "c"},
-                    {"name": "Continuous Delivery", "loc": 1.2, "movement": "c"},
-                    {"name": "Smoke Tests", "loc": 1.8, "movement": "c"},
-                    {"name": "Mobile Web Apps", "loc": 1.2, "movement": "c"},
+                    // [Hold]
+                    createItem('Ant', 3.40, 't'),
+                    createItem('Zookeeper', 3.40, 't'),
+                    createItem('ActiveMQ', 3.50, 't'),
+                    createItem('Less', 3.50, 't'),
+                    // [Assess]
+                    createItem('etcd', 2.80, 't'),                    
+                    createItem('leiningen', 2.50, 't'),
+                    createItem('Gradle', 2.70, 't'),
+                    createItem('RabbitMQ', 2.80, 't'),
+                    // [Trial]
+                    createItem('Collected', 1.80, 't'),
+                    createItem('statsd', 1.70, 't'),
+                    createItem('redis', 1.70, 't'),
+                    createItem('Docker', 1.20, 't'),
+                    createItem('graphite', 1.20, 't'),
+                    createItem('MongoDB', 1.20, 't'),
+                    // [Adopt]
+                    createItem('Sass', 0.90, 't'),
+                    createItem('Require.js', 0.60, 't'),
+                    createItem('Bower', 0.85, 't'),
+                    createItem('Grunt', 0.30, 't'),
+                    createItem('Maven', 0.55, 't'),
+                    createItem('Chef', 0.90, 't'),
+                    createItem('Vagrant', 0.60, 't'),
+                    createItem('GitHub', 0.40, 't'),
+                    createItem('nagios', 0.80, 't'),
+                    createItem('MySQL', 0.80, 't')                    
+                ]
+            },
+            { "name": "Platforms",
+                "left" :45,
+                 "top" : (1200/2 + 18),
+                "color" : "#DC6F1D",
+                // [Platforms] (180 - 270)
+                "items" : [
 
-                    // Adopt
-                    {"name": "Unit Testing", "loc": 0.2, "movement": "c"},
-                    {"name": "TDD", "loc": 0.7, "movement": "c"},
-                    {"name": "Responsive Design", "loc": 0.4, "movement": "c"},
-                    {"name": "Continuous Integration", "loc": 0.8, "movement": "c"},
-                    {"name": "Version control systems", "loc": 0.5, "movement": "c"}
+                    // [Hold]
+                    createItem('OSGi', 3.50, 't'),
+                    createItem('Sling', 3.80, 't'),
+                    createItem('JBoss', 3.20, 't'),
+                    createItem('Servicemix', 3.70, 't'),
+                    createItem('J2EE', 3.50, 't'),
+                    // [Assess]
+                    createItem('Dropwizard', 2.80, 't'),
+                    createItem('Drupal', 2.20, 't'),
+                    createItem('Statamic', 2.20, 't'),
+                    
+                    // [Trial]
+                    createItem('Grails', 1.30, 't'),
+                    createItem('Totem', 1.20, 't'),
+                    
+                    createItem('Angular.js', 1.15, 't'),
+                    // [Adopt]
+                    createItem('Cadmium', 0.70, 't'),
+                    createItem('Amazon AWS', 0.50, 't'),
+                    createItem('Twitter Bootstrap', 0.60, 't'),
+
+                ]
+            },
+            { "name": "Languages",
+                "color" : "#B70062",
+                "left"  : (1160-100+30),
+                "top" :   (1200/2 + 18),
+                // [Languages & Framework] (270 - 360)
+                "items" : [ 
+
+                    // [Hold]
+                    createItem('Flash', 3.40, 't'),
+                    createItem('Flex', 3.80, 't'),
+                    createItem('Dart', 3.15, 't'),
+                    // [Assess]
+                    createItem('Ruby', 2.50, 't'),
+                    createItem('Go', 2.80, 't'),
+                    createItem('Clojure', 2.70, 't'),
+                    // [Trial]
+                    createItem('SVG', 1.70, 't'),
+                    createItem('PHP', 1.20, 't'),
+                    createItem('Groovy', 1.20, 't'),
+                    createItem('Python', 1.40, 't'),
+                    // [Adopt]                    
+                    createItem('HTML 5', 0.45, 't'),
+                    createItem('Docpad', 0.70, 't'),
+                    createItem('Javascript', 0.70, 't'),
+                    createItem('Node.js', 0.50, 't'),
+                    createItem('Java', 0.25, 't'),
+                    createItem('Objective C', 0.80, 't')
+
                 ]
             }
-            // },
-            // { "name": "Tools",
-            //     "left": 1160-100+30,
-            //     "top" : 18,
-            //     "color" : "#587486",
-            //     "items" : [ 
-            //         {"name":"ESB", "pc":{"r":390,"t":20},"movement":"t"},   
-            //         {"name":"Intentional Programming", "pc":{"r":310,"t":10},"movement":"c"},   
-            //         {"name":"Cross mobile platforms", "pc":{"r":280,"t":85},"movement":"c"},   
-            //         {"name":"Github", "pc":{"r":280,"t":70},"movement":"c"},   
-            //         {"name":"Restfulie", "pc":{"r":280,"t":50},"movement":"c"},   
-            //         {"name":"RDF triple stores", "pc":{"r":280,"t":30},"movement":"c"},   
-            //         {"name":"Apache camel", "pc":{"r":180,"t":85},"movement":"c"},   
-            //         {"name":"Next gen test tools", "pc":{"r":180,"t":75},"movement":"c"},   
-            //         {"name":"NoSQL", "pc":{"r":180,"t":65},"movement":"c"},   
-            //         {"name":"Neo4j", "pc":{"r":180,"t":50},"movement":"c"},   
-            //         {"name":"Message busses without smarts", "pc":{"r":160,"t":85},"movement":"c"},   
-            //         {"name":"Puppet", "pc":{"r":130,"t":85},"movement":"c"},   
-            //         {"name":"mongoDB", "pc":{"r":130,"t":55},"movement":"c"},   
-            //         {"name":"Mercurial", "pc":{"r":130,"t":30},"movement":"c"},   
-            //         {"name":"Git", "pc":{"r":130,"t":15},"movement":"c"},   
-            //         {"name":"Squid", "pc":{"r":80,"t":85},"movement":"c"},   
-            //         {"name":"ASP.NET MVC", "pc":{"r":80,"t":10},"movement":"c"},   
-            //         {"name":"Subversion", "pc":{"r":30,"t":30},"movement":"c"}
-            //     ]
-            // },
-            // { "name": "Platforms",
-            //     "left" :45,
-            //      "top" : (1200/2 + 18),
-            //     "color" : "#DC6F1D",
-            //     "items" : [
-            //         {"name":"Rich internet applications", "pc":{"r":390,"t":265},"movement":"c"},   
-            //         {"name":"GWT", "pc":{"r":390,"t":250},"movement":"c"},   
-            //         {"name":"IE8", "pc":{"r":390,"t":230},"movement":"c"},   
-            //         {"name":"WS-* beyond basic profile", "pc":{"r":390,"t":190},"movement":"c"},   
-            //         {"name":"Azure", "pc":{"r":290,"t":265},"movement":"c"},   
-            //         {"name":"Mobile Web", "pc":{"r":275,"t":260},"movement":"t"},   
-            //         {"name":"Google App Engine", "pc":{"r":290,"t":255},"movement":"c"},   
-            //         {"name":"Application appliances", "pc":{"r":190,"t":245},"movement":"c"},   
-            //         {"name":"Google as corporate platform", "pc":{"r":290,"t":200},"movement":"c"},   
-            //         {"name":"GPGPU", "pc":{"r":190,"t":185},"movement":"t"},   
-            //         {"name":"App containers", "pc":{"r":250,"t":260},"movement":"c"},   
-            //         {"name":"OAuth", "pc":{"r":130,"t":260},"movement":"t"},   
-            //         {"name":"RDFa", "pc":{"r":130,"t":250},"movement":"t"},   
-            //         {"name":"Location based services", "pc":{"r":130,"t":230},"movement":"c"},   
-            //         {"name":"iPad", "pc":{"r":130,"t":220},"movement":"c"},   
-            //         {"name":"EC2 & S3", "pc":{"r":190,"t":250},"movement":"c"},   
-            //         {"name":"Facebook as a business platform", "pc":{"r":190,"t":190},"movement":"c"},   
-            //         {"name":"JVM as platform", "pc":{"r":90,"t":265},"movement":"c"},   
-            //         {"name":"iPhone", "pc":{"r":90,"t":215},"movement":"c"},   
-            //         {"name":"Android", "pc":{"r":90,"t":190},"movement":"c"},   
-            //         {"name":"KVM", "pc":{"r":70,"t":260},"movement":"t"},   
-            //         {"name":"Atom", "pc":{"r":70,"t":245},"movement":"t"},   
-            //         {"name":"ALT.NET", "pc":{"r":90,"t":190},"movement":"c"},   
-            //         {"name":"IE6 End of Life", "pc":{"r":30,"t":225},"movement":"c"}
-            //     ]
-            // },
-            // { "name": "Languages",
-            //     "color" : "#B70062",
-            //     "left"  : (1160-100+30),
-            //     "top" :   (1200/2 + 18),
-            //     "items" : [ 
-            //         {"name":"Java language end of life", "pc":{"r":290,"t":355},"movement":"c"},   
-            //         {"name":"F#", "pc":{"r":270,"t":330},"movement":"c"},   
-            //         {"name":"Scala", "pc":{"r":290,"t":320},"movement":"c"},   
-            //         {"name":"Clojure", "pc":{"r":260,"t":310},"movement":"c"},   
-            //         {"name":"HTML 5", "pc":{"r":250,"t":275},"movement":"c"},   
-            //         {"name":"DSLs", "pc":{"r":190,"t":340},"movement":"c"},   
-            //         {"name":"Groovy", "pc":{"r":190,"t":280},"movement":"c"},   
-            //         {"name":"C#4", "pc":{"r":90,"t":355},"movement":"c"},   
-            //         {"name":"JRuby", "pc":{"r":90,"t":330},"movement":"c"},   
-            //         {"name":"Javascript as a 1st class language", "pc":{"r":90,"t":275},"movement":"c"},   
-            //         {"name":"Ruby", "pc":{"r":30,"t":282},"movement":"c"}
-            //     ]
-            // }
         ]
     };
 });
