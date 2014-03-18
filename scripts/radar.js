@@ -1,5 +1,5 @@
 /* globals define*/
- define(['utils', 'd3'], function (utils, d3) {
+ define(['utils', 'd3', 'lodash'], function (utils, d3, _) {
 
   function displayArcs(radar, radarData) {
     var archLabelPadding = 5;
@@ -41,39 +41,38 @@
     return Math.floor(blip.loc);
   }
 
-  // Break the radar data into buckets based on which ring it should appear
-  function nestDataByRing(radarData) {    
-
+  function nestDataByRing(radarData) {
+    // This still mutates data. Not happy with that.
     for (var section in radarData.sections) {
-      radarData.sections[section].items = d3.nest()
-                  .key(getRing)
-                  .map(radarData.sections[section].items);
+      radarData.sections[section].rings = _.groupBy(radarData.sections[section].items, getRing);
     }
 
     return radarData;
+  }
+
+  function computeTheta(section, blip, index, blips) {
+    var newBlip = _.clone(blip);
+    newBlip.t = section.bounds.start + (section.bounds.width/blips.length) * (parseInt(index, 10) + 0.5);
+    return newBlip;
+  }
+
+  function spaceRing(section, ring) {
+    // Completely replace the ring, no need to clone.
+    return _.map(ring, _.partial(computeTheta, section));
+  }
+
+  // Space out the blips in the section based on the section bounds.
+  function spaceSection(section) {
+    var newSection = _.clone(section);
+    newSection.rings = _.map(section.rings, _.partial(spaceRing, section));
+    return newSection;
   }
 
   function spaceRadar(radarData) {
-    for (var section in radarData.sections) {
-      spaceSection(radarData.sections[section]);
-    }
-
-    return radarData;
-  }
-
-  function spaceSection(section) {
-    // TODO Compute the radii for the entries based on the quadrant bounds
-
-    for (var ring in section.items) {
-      // Space entries for the ring
-      for (var blip in section.items[ring]) {
-        section.items[ring][blip].t = section.bounds.start + (section.bounds.width/section.items[ring].length) * (parseInt(blip, 10) + 0.5);
-      }      
-    }
-    // nestedEntry.values.length
-
-    return section;
-  }
+    var newRadar = _.clone(radarData);
+    newRadar.sections = _.map(radarData.sections, spaceSection);
+    return newRadar;
+  }  
 
   // Find and set the bounds for each section
   function computeBounds(radarData) {
@@ -86,28 +85,24 @@
     return radarData;
   }
 
-  function flattenData(radarData) {
+  function unionify (acc, value) { 
+    return _.union(acc, value);
+  }
+
+  function flattenRings(radarData) {
+    // This mutates in place and isn't best practice
     // Lets do a quick hack to dump all the rings in a section back into a single array
     for (var section in radarData.sections) {
-      var sectionItems = [];
-      for (var item in radarData.sections[section].items) {
-        for (var blip in radarData.sections[section].items[item]) {
-          sectionItems.push(radarData.sections[section].items[item][blip]);
-        }
-      }
-
-      radarData.sections[section].items = sectionItems;
+      radarData.sections[section].items = _.reduce(radarData.sections[section].rings, unionify);
     }    
+
+    return radarData;
   }
 
   function init(radarData) {
     // $('#title').text(radarData.title);  
 
-    radarData = nestDataByRing(radarData);
-    radarData = computeBounds(radarData);
-    radarData = spaceRadar(radarData);
-
-    flattenData(radarData);
+    radarData = _.compose(flattenRings, spaceRadar, computeBounds, nestDataByRing)(radarData);
 
     var blipLabelPadding = 5;
 
@@ -173,10 +168,10 @@
       .append("g")
       .attr("class", "blips")  
       .attr("transform", function(d) {
-          var polar = utils.polar_to_raster(d.loc*100, d.t, radarData.w, radarData.h);
+          var cartesian = utils.polar_to_cartesian(d.loc*100, d.t, radarData.w, radarData.h);
 
-          d.x = polar[0];
-          d.y = radarData.h-polar[1];
+          d.x = cartesian[0] + radarData.w/2;
+          d.y = radarData.h-(cartesian[1] + radarData.h/2);
           return "translate(" + d.x + "," + d.y + ")"; 
         });  
 

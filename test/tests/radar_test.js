@@ -86,8 +86,8 @@ define(['radar'], function(radar) {
                 }]};
 
         // assert data comes out in buckets appropriately
-        expect(expectedDataA).to.eql(nestedData.sections[0].items);
-        expect(expectedDataB).to.eql(nestedData.sections[1].items);
+        expect(expectedDataA).to.eql(nestedData.sections[0].rings);
+        expect(expectedDataB).to.eql(nestedData.sections[1].rings);
       });
     
       describe("section bounds", function() {

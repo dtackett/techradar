@@ -2,6 +2,7 @@
 requirejs.config({  
   paths: {
     d3: '../lib/d3/d3',
+    lodash: '../lib/lodash/lodash.compat',
     utils: '../scripts/utils',
     radar: '../scripts/radar'
   },
