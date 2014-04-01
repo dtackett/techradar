@@ -1,19 +1,21 @@
 /* globals define */
 define(function() {
 
+    /**
+    * Create a radar item.
+    *   name: name of the item
+    *   loc: the position in relation to rings
+    *   movement: 't' changed position, 'c' maintained position
+    */
     function createItem(name, loc, movement) {
         return {
-            "name":name, 
+            "name":name,
             "loc": loc,
             "movement":movement
         };
     }
 
     return {
-        //This is the title for your window tab, and your Radar
-        title : "Technology Radar",
-
-        //This is the concentic circles that want on your radar
         rings : [
                        {'r':100,'name':'Adopt'}
                       ,{'r':200,'name':'Trial'}
@@ -22,57 +24,24 @@ define(function() {
                      // ,{'r':500,'name':'Possible Extra if you want it'}
                      ],
 
-        //This is your raw data
-        //
-        // Key
-        //
-        // movement:
-        //   t = moved
-        //   c = stayed put
-        //
-        // blipSize: 
-        //  intValue; This is optional, if you omit this property, then your blip will be size 70.
-        //            This give you the ability to be able to indicate information by blip size too
-        //
-        // url:
-        // StringValue : This is optional, If you add it then your blips will be clickable to some URL
-        //
-        // pc: polar coordinates
-        //   r = distance away from origin ("radial coordinate")
-        //     - Each level is 100 points away from origin
-        //     t = angle of the point from origin ("angular coordinate")
-        //     - 0 degrees is due east
-        //
-        // Coarse-grained quadrants
-        // - Techniques: elements of a software development process, such as experience design; and ways of structuring software, such micro-services.
-        // - Tools: components, such as databases, software development tools, such as versions control systems; or more generic categories of tools, such as the notion of polyglot persistance.
-        // - Platforms: things that we build software on top of: mobile technologies like Android, virtual platforms like the JVM, or generic kinds of platforms like hybrid clouds
-        // - Programming Languages and Frameworks
-        //
-        // Rings:
-        // - Adopt: blips you should be using now; proven and mature for use
-        // - Trial: blips ready for use, but not as completely proven as those in the adopt ring; use on a trial basis, to decide whether they should be part of your toolkit
-        // - Assess: things that you should look at closely, but not necessarily trial yet - unless you think they would be a particularly good fit for you
-        // - Hold: things that are getting attention in the industry, but not ready for use; sometimes they are not mature enough yet, sometimes they are irredeemably flawed
-        //      Note: there's no "avoid" ring, but throw things in the hold ring that people shouldn't use.
-
+        // The width and height of the rendered section
         h : 1160,
         w : 1200,
 
+        // The sections of the radar
         sections : [
             { "name": "Techniques",
                 "left" : 45,
                 "top" : 18,
                 "color" : "#8FA227",
-                // [Techniques] (90 - 180)
-                "items" : [ 
+                "items" : [
                     // [Hold]
                     // [Assess]
                     createItem('Performance testing', 2.30, 't'),
                     createItem('Load testing', 2.80, 't'),
-                    createItem('Integration Testing', 2.20, 't'),                    
+                    createItem('Integration Testing', 2.20, 't'),
                     // [Trial]
-                    createItem('Self executable app containers', 1.20, 't'),                    
+                    createItem('Self executable app containers', 1.20, 't'),
                     createItem('Continuous Delivery', 1.20, 't'),
                     createItem('Smoke Tests', 1.40, 't'),
                     createItem('Mobile Web Apps', 1.60, 't'),
@@ -91,8 +60,7 @@ define(function() {
                 "left": 1160-100+30,
                 "top" : 18,
                 "color" : "#587486",
-                // [Tools] (0 - 90)
-                "items" : [ 
+                "items" : [
 
                     // [Hold]
                     createItem('Ant', 3.40, 't'),
@@ -100,7 +68,7 @@ define(function() {
                     createItem('ActiveMQ', 3.50, 't'),
                     createItem('Less', 3.50, 't'),
                     // [Assess]
-                    createItem('etcd', 2.80, 't'),                    
+                    createItem('etcd', 2.80, 't'),
                     createItem('leiningen', 2.50, 't'),
                     createItem('Gradle', 2.70, 't'),
                     createItem('RabbitMQ', 2.80, 't'),
@@ -121,14 +89,13 @@ define(function() {
                     createItem('Vagrant', 0.60, 't'),
                     createItem('GitHub', 0.40, 't'),
                     createItem('nagios', 0.80, 't'),
-                    createItem('MySQL', 0.80, 't')                    
+                    createItem('MySQL', 0.80, 't')
                 ]
             },
             { "name": "Platforms",
                 "left" :45,
-                 "top" : (1200/2 + 18),
+                "top" : (1200/2 + 18),
                 "color" : "#DC6F1D",
-                // [Platforms] (180 - 270)
                 "items" : [
 
                     // [Hold]
@@ -141,11 +108,11 @@ define(function() {
                     createItem('Dropwizard', 2.80, 't'),
                     createItem('Drupal', 2.20, 't'),
                     createItem('Statamic', 2.20, 't'),
-                    
+
                     // [Trial]
                     createItem('Grails', 1.30, 't'),
                     createItem('Totem', 1.20, 't'),
-                    
+
                     createItem('Angular.js', 1.15, 't'),
                     // [Adopt]
                     createItem('Cadmium', 0.70, 't'),
@@ -158,8 +125,7 @@ define(function() {
                 "color" : "#B70062",
                 "left"  : (1160-100+30),
                 "top" :   (1200/2 + 18),
-                // [Languages & Framework] (270 - 360)
-                "items" : [ 
+                "items" : [
 
                     // [Hold]
                     createItem('Flash', 3.40, 't'),
@@ -174,7 +140,7 @@ define(function() {
                     createItem('PHP', 1.20, 't'),
                     createItem('Groovy', 1.20, 't'),
                     createItem('Python', 1.40, 't'),
-                    // [Adopt]                    
+                    // [Adopt]
                     createItem('HTML 5', 0.45, 't'),
                     createItem('Docpad', 0.70, 't'),
                     createItem('Javascript', 0.70, 't'),
