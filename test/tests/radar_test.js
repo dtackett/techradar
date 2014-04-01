@@ -76,8 +76,8 @@ define(['radar'], function(radar) {
                   "movement": holdB.movement
                 }]
               };
-                
-        var expectedDataB = 
+
+        var expectedDataB =
             {
               "2": [{
                   "name": testEntry.name,
@@ -89,7 +89,7 @@ define(['radar'], function(radar) {
         expect(expectedDataA).to.eql(nestedData.sections[0].rings);
         expect(expectedDataB).to.eql(nestedData.sections[1].rings);
       });
-    
+
       describe("section bounds", function() {
         it("when no data", function() {
           // create test data
@@ -103,7 +103,7 @@ define(['radar'], function(radar) {
 
           // assert location is correct
           expect(testData).to.eql(computedBounds);
-        }); 
+        });
 
         it("when single section", function() {
           // create test data
@@ -120,7 +120,7 @@ define(['radar'], function(radar) {
           var singleSection = createSection('Single', '', [holdA]);
           singleSection.bounds = {
             'start': 0,
-            'width': 360
+            'width': 2*Math.PI
           };
 
           var expectedData = {
@@ -132,7 +132,7 @@ define(['radar'], function(radar) {
 
           // assert location is correct
           expect(expectedData).to.eql(computedData);
-        });         
+        });
 
         it("when multiple sections", function() {
           // create test data
@@ -150,7 +150,7 @@ define(['radar'], function(radar) {
 
           // compute radii bounds
           var computedBounds = radar.computeBounds(testData);
-          var expectedWidth = 60;
+          var expectedWidth = (2*Math.PI)/6;
 
           // assert the bounds are correct
           for(var section in testData.sections) {
@@ -158,9 +158,9 @@ define(['radar'], function(radar) {
               .to
               .eql(computedBounds.sections[section].bounds);
           }
-        });         
+        });
       });
-    });      
+    });
 
     describe("space points", function () {
       it("in same ring", function() {
@@ -174,7 +174,7 @@ define(['radar'], function(radar) {
 
         testSection.bounds = {
           'start': 0,
-          'width': 360
+          'width': 2*Math.PI
         };
 
         // space points
@@ -190,7 +190,7 @@ define(['radar'], function(radar) {
         // create test data
         // send through location conversion
         // assert location is correct
-      });       
-    });    
+      });
+    });
   });
 })

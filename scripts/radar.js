@@ -1,5 +1,5 @@
 /* globals define*/
- define(['utils', 'd3', 'lodash'], function (utils, d3, _) {
+ define(['d3', 'lodash'], function (d3, _) {
 
   function displayArcs(radar, radarData) {
     var archLabelPadding = 5;
@@ -13,17 +13,17 @@
       .attr("transform", function(d) {
            d.x = radarData.w/2;
            d.y = radarData.h/2;
-           return "translate(" + d.x + "," + d.y + ")"; 
+           return "translate(" + d.x + "," + d.y + ")";
          });
 
-    arcs.append("circle")  
+    arcs.append("circle")
       .attr("class", "arc")
       .attr("r", function(d) {
           return d.r;
       })
      .attr("fill", "none")
      .attr("stroke", "gray")
-     .attr("stroke-width", 1);  
+     .attr("stroke-width", 1);
 
     arcs.append("text")
       .attr("text-anchor", "middle")
@@ -34,7 +34,11 @@
         return d.name;
       })
       .attr("font-family", "sans-serif")
-      .attr("font-size", "11px");  
+      .attr("font-size", "11px");
+  }
+
+  function convertToCartesian(r, theta) {
+    return {"x": r * Math.cos(theta), "y": r * Math.sin(theta)};
   }
 
   function getRing(blip) {
@@ -72,20 +76,20 @@
     var newRadar = _.clone(radarData);
     newRadar.sections = _.map(radarData.sections, spaceSection);
     return newRadar;
-  }  
+  }
 
   // Find and set the bounds for each section
   function computeBounds(radarData) {
-    var sectionWidth = 360/radarData.sections.length;
+    var sectionWidth = (2*Math.PI)/radarData.sections.length;
 
     for (var section in radarData.sections) {
       radarData.sections[section].bounds = {'start': sectionWidth*section, 'width': sectionWidth};
     }
-    
+
     return radarData;
   }
 
-  function unionify (acc, value) { 
+  function unionify (acc, value) {
     return _.union(acc, value);
   }
 
@@ -94,13 +98,13 @@
     // Lets do a quick hack to dump all the rings in a section back into a single array
     for (var section in radarData.sections) {
       radarData.sections[section].items = _.reduce(radarData.sections[section].rings, unionify);
-    }    
+    }
 
     return radarData;
   }
 
   function init(radarData) {
-    // $('#title').text(radarData.title);  
+    // $('#title').text(radarData.title);
 
     radarData = _.compose(flattenRings, spaceRadar, computeBounds, nestDataByRing)(radarData);
 
@@ -127,7 +131,7 @@
       .attr("height", radarData.h);
 
     // Draw the radar arcs
-    displayArcs(radar, radarData); 
+    displayArcs(radar, radarData);
 
     // Draw the axis
     radar.append("g")
@@ -146,11 +150,11 @@
       .attr("x1", radarData.w/2)
       .attr("y1", (radarData.h/2)-maxRadius)
       .attr("x2", radarData.w/2)
-      .attr("y2", (radarData.h/2)+maxRadius);  
+      .attr("y2", (radarData.h/2)+maxRadius);
 
     // Draw the blips
     var techs = radar.append("g")
-      .attr("class", "radar blips")  
+      .attr("class", "radar blips")
       .selectAll("g")
       .data(radarData.sections)
       .enter()
@@ -163,20 +167,20 @@
       .selectAll("g")
       .data(function(d) {
         return d.items;
-      })    
+      })
       .enter()
       .append("g")
-      .attr("class", "blips")  
+      .attr("class", "blips")
       .attr("transform", function(d) {
-          var cartesian = utils.polar_to_cartesian(d.loc*100, d.t, radarData.w, radarData.h);
+          var cartesian = convertToCartesian(d.loc*100, d.t);
 
-          d.x = cartesian[0] + radarData.w/2;
-          d.y = radarData.h-(cartesian[1] + radarData.h/2);
-          return "translate(" + d.x + "," + d.y + ")"; 
-        });  
+          d.x = cartesian.x + radarData.w/2;
+          d.y = radarData.h-(cartesian.y + radarData.h/2);
+          return "translate(" + d.x + "," + d.y + ")";
+        });
 
     // The symbol for the blip
-    blips.append("path")  
+    blips.append("path")
       .attr("class", "blip")
       .attr("d", function() {
         var movement = d3.select(this.parentNode).datum().movement;
@@ -190,12 +194,12 @@
         }
 
         return d3.svg.symbol().type(type).size(d3.select(this.parentNode).datum().blipSize || 90)();
-       }) 
+       })
       .attr("fill", function() {
-        return d3.select(this.parentNode.parentNode).datum().color;  
+        return d3.select(this.parentNode.parentNode).datum().color;
        })
       .attr("stroke", "gray")
-      .attr("stroke-width", 1);  
+      .attr("stroke-width", 1);
 
     // The index for the blip
     blips.append("text")
@@ -203,15 +207,15 @@
       .attr("y", function() {
         return -blipLabelPadding;
       })
-      .text(function(d) {    
+      .text(function(d) {
         return d.globalIndex;
       })
       .attr("font-family", "sans-serif")
-      .attr("font-size", "11px");     
+      .attr("font-size", "11px");
 
     // Draw the legend
     var legend = radar.append("g")
-      .attr("class", "radar legends")  
+      .attr("class", "radar legends")
       .selectAll("g")
       .data(radarData.sections)
       .enter()
@@ -222,36 +226,36 @@
       .attr("transform", function(d) {
           d.x = d.left;
           d.y = d.top;
-          return "translate(" + d.x + "," + d.y + ")"; 
-        });    
+          return "translate(" + d.x + "," + d.y + ")";
+        });
 
     // Header for each category
     legend.append("text")
       .attr("text-anchor", "left")
-      .attr("y", 4)  
-      .text(function(d) {    
+      .attr("y", 4)
+      .text(function(d) {
         return d.quadrant;
       })
       .attr("font-family", "sans-serif")
-      .attr("font-size", "18px");     
+      .attr("font-size", "18px");
 
     // Group all the legend entries together
     var entry = legend.append("g")
       .selectAll("g")
       .data(function(d) {
         return d.items;
-      })    
+      })
       .enter()
       .append("g")
-      .attr("class", "blips")  
+      .attr("class", "blips")
       .attr("transform", function(d, i) {
           d.x = 0;
           d.y = 18 + i*18;
-          return "translate(" + d.x + "," + d.y + ")"; 
-        });  
+          return "translate(" + d.x + "," + d.y + ")";
+        });
 
     // For each entry add a symbol to represent the change or lack there of
-    entry.append("path")  
+    entry.append("path")
       .attr("class", "blip")
       .attr("d", function() {
         var movement = d3.select(this.parentNode).datum().movement;
@@ -265,34 +269,34 @@
         }
 
         return d3.svg.symbol().type(type)();
-       }) 
+       })
       .attr("fill", function() {
-        return d3.select(this.parentNode.parentNode).datum().color;  
+        return d3.select(this.parentNode.parentNode).datum().color;
        })
       .attr("stroke", "gray")
-      .attr("stroke-width", 1);  
+      .attr("stroke-width", 1);
 
     // The index as seen on the radar
     entry.append("text")
       .attr("text-anchor", "left")
-      .attr("x", 10)  
-      .attr("y", 4)  
-      .text(function(d) {    
+      .attr("x", 10)
+      .attr("y", 4)
+      .text(function(d) {
         return d.globalIndex;
       })
       .attr("font-family", "sans-serif")
-      .attr("font-size", "11px");   
+      .attr("font-size", "11px");
 
     // The name of the entry
     entry.append("text")
       .attr("text-anchor", "left")
       .attr("x", 26)
-      .attr("y", 4)  
-      .text(function(d) {    
+      .attr("y", 4)
+      .text(function(d) {
         return d.name;
       })
       .attr("font-family", "sans-serif")
-      .attr("font-size", "11px");     
+      .attr("font-size", "11px");
   }
 
   return {
